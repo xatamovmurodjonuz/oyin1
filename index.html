@@ -614,3 +614,72 @@ function checkAchievements() {
     applySkin(savedSkin);
   });
 </script>
+            <!-- === YANGI FUNKSIYALAR TUGMALARI === -->
+<div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+  <button onclick="askNotificationPermission()">🔔 Bildirishnoma</button>
+  <button onclick="shareScore()">📤 Telegramga yuborish</button>
+  <button onclick="toggleTheme()">🎨 Temani almashtirish</button>
+  <a href="/admin" target="_blank">
+    <button>👨‍💻 Admin Panel</button>
+  </a>
+</div>
+
+<!-- === CSS: Dark mode === -->
+<style>
+  body.dark-theme {
+    background-color: #111;
+    color: #fff;
+  }
+
+  body.dark-theme button {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #888;
+  }
+</style>
+
+<!-- === JS FUNKSIYALAR === -->
+<script>
+  // 🔔 Bildirishnoma ruxsatini so‘rash
+  function askNotificationPermission() {
+    if (!("Notification" in window)) {
+      alert("Brauzeringiz bildirishnomalarni qo‘llab-quvvatlamaydi.");
+    } else if (Notification.permission !== "granted") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          new Notification("✅ Ruxsat berildi! Endi xabarnomalar yuboriladi.");
+        }
+      });
+    }
+  }
+
+  // 🔔 Bildirishnoma yuborish
+  function sendNotification(title, body) {
+    if (Notification.permission === "granted") {
+      new Notification(title, { body });
+    }
+  }
+
+  // ⏰ O‘yin tugagach yuborish uchun sendNotification() dan foydalaning:
+  // Misol:
+  /*
+  function endGame() {
+    alert("O‘yin tugadi!");
+    sendNotification("O‘yin tugadi!", "Siz rekord o‘rnatdingiz!");
+  }
+  */
+
+  // 📤 Telegramga rekord yuborish
+  function shareScore() {
+    const score = localStorage.getItem("record") || 0;
+    const text = encodeURIComponent(`🏆 Mening rekordim: ${score} marta!`);
+    const url = `https://t.me/share/url?url=&text=${text}`;
+    window.open(url, "_blank");
+  }
+
+  // 🎨 Tungi/oq temani almashtirish
+  function toggleTheme() {
+    document.body.classList.toggle("dark-theme");
+  }
+</script>
+
